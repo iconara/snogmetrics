@@ -27,7 +27,7 @@ Yes it does.
 
 ## What if I want to call KISSmetrics from both my controllers _and_ JavaScript?
 
-Just do it. You need to make sure that the `_kmq` array exists, though. SNOGmetrics will define it where you place <%= km.js! %>, but that is usually at the bottom of the page (with the async API you could probably put it at the top if you wanted to), so if you want to add things to `_kmq` before that you need to define it yourself. Just add `var _kmq = _kmq || []` and you're set.
+Just do it. You need to make sure that the `_kmq` array exists, though. SNOGmetrics will define it where you place `<%= km.js! %>`, but that is usually at the bottom of the page (with the async API you could probably put it at the top if you wanted to), so if you want to add things to `_kmq` before that you need to define it yourself. Just add `var _kmq = _kmq || []` and you're set.
 
 ## Anything else I should know?
 
