@@ -1,25 +1,22 @@
-require 'rubygems'
-require 'rake'
+require 'spec/rake/spectask'
+
 
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "snogmetrics"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "theo@iconara.net"
-    gem.homepage = "http://github.com/iconara/snogmetrics"
-    gem.authors = ["Theo"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_development_dependency "yard", ">= 0"
+    gem.name = 'snogmetrics'
+    gem.summary = %Q{TODO: SNOGmetrics is a KISSmetrics helper for Rails}
+    gem.description = %Q{TODO: SNOGmetrics gives you the best of both worlds: access to KISSmetrics' JavaScript API through Ruby}
+    gem.email = 'theo@iconara.net'
+    gem.homepage = 'http://github.com/iconara/snogmetrics'
+    gem.authors = ['Theo']
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+  puts 'Jeweler (or a dependency) not available. Install it with: gem install jeweler'
 end
 
-require 'spec/rake/spectask'
 Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.libs << 'lib' << 'spec'
   spec.spec_files = FileList['spec/**/*_spec.rb']
@@ -40,6 +37,6 @@ begin
   YARD::Rake::YardocTask.new
 rescue LoadError
   task :yardoc do
-    abort "YARD is not available. In order to run yardoc, you must: sudo gem install yard"
+    abort 'YARD is not available. In order to run yardoc, you must: sudo gem install yard'
   end
 end
