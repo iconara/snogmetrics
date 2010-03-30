@@ -1,6 +1,6 @@
 # SNOGmetrics
 
-SNOGmetrics is a bridge between Rails and KISSmetrics JavaScript API.
+SNOGmetrics is a bridge between Rails and KISSmetrics' JavaScript API.
 
 ## But KISSmetrics has a Ruby API!
 
@@ -8,17 +8,32 @@ Yes, but it's not as good as the JavaScript one, they even say so themselves:
 
 > One thing to note about the Ruby API  is that it is not as full featured as the JavaScript client. Therefore, in most cases we recommend using the JavaScript client. However, some things are easier to track server-side, therefore we have provided a basic Ruby client.
 
-It's true, but why settle for either/or?
+It's true, but why settle for either or?
 
-SNOGmetrics works similarly to flash messages. Events are recorded and saved to the session, and are then sent when the next page is rendered. This way you get all of the benefits of the JavaScript API, but you can record events in your controllers. All you have to do is install this gem and add a line to your layout.
+SNOGmetrics works similarly to flash messages. Events are recorded and saved to the session, and are then sent when the next page is rendered. This way you get all of the benefits of the JavaScript API, but you can record events in your controllers. All you have to do is install this gem, configure it, and add a snipplet of code to your layout.
 
-## Installation
+## How do I use it?
 
 1. `gem install snogmetrics`
 2. Edit `config/environment.rb` and add `config.gem 'snogmetrics'`
-3. Edit your `ApplicationController` and add `include Snogmetrics`
-4. Edit your layout(s) and add `<% km_output_js! %>` where you keep your JavaScript includes.
-5. Replace all your `KM.record(...)` and `KM.identify(...)` calls in JavaScript with calls to `km_record(...)` and `km_identify(...)`
+3. Edit your layout(s) and add `<%= km.js! %>` where you keep your JavaScript includes.
+4. Replace all your `KM.record(...)` and `KM.identify(...)` calls in JavaScript with calls to `km.record(...)` and `km.identify(...)`
+
+Have a look at the included example application to see it in action.
+
+## Does it use the asynchronous API?
+
+Yes it does.
+
+## What if I want to call KISSmetrics from both my controllers _and_ JavaScript?
+
+Just do it. You need to make sure that the `_kmq` array exists, though. SNOGmetrics will define it where you place <%= km.js! %>, but that is usually at the bottom of the page (with the async API you could probably put it at the top if you wanted to), so if you want to add things to `_kmq` before that you need to define it yourself. Just add `var _kmq = _kmq || []` and you're set.
+
+## Anything else I should know?
+
+Yes, SNOGmetrics will _not_ output the KISSmetrics API code unless `RAILS_ENV` is `production`. Instead it will output code that logs all calls to the console (if `console` is defined).
+
+In a future version this behaviour might be overrideable.
 
 ## Note on Patches/Pull Requests
  

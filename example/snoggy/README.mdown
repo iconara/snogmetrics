@@ -1,0 +1,7 @@
+# SNOGmetrics example application
+
+This is a small Rails application that uses SNOGmetrics. Look in `app/controllers/snogs_controller.rb` to see how you interact with the API from a controller, and look at `app/views/layouts/application.html.erb` to see the snipplet you need to add to your layout file.
+
+Because it's easier for me when I code I've added SNOGmetrics as a plugin in the `vendor/plugins` directory (by way of symlinks), but in a real application you would add the gem in `config/environment.rb` (there's a out-commented line there if you want to see how it's done).
+
+To set the KISSmetrics API key you need to add an initializer, see `config/initializers/snogmetrics.rb` for an example.
