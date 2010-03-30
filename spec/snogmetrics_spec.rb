@@ -1,6 +1,17 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 
+module Rails
+  def self.env
+    self
+  end
+  
+  def self.production?
+    false
+  end
+end
+
+
 describe Snogmetrics do
   
   before do
@@ -9,6 +20,7 @@ describe Snogmetrics do
     @context.extend(Snogmetrics)
     @context.extend(ERB::Util)
     @context.stub!(:session).and_return(@session)
+    @context.stub!(:kissmetrics_api_key).and_return('abc123')
   end
   
   describe '#km_record' do
@@ -66,21 +78,39 @@ describe Snogmetrics do
   end
   
   describe '#km_js' do
-    it 'outputs a JavaScript tag' do
-      @context.km_identify('Phil')
-      @context.km_js.should match(%r{^<script type="text/javascript">})
-      @context.km_js.should match(%r{</script>$})
-    end
-    
     it 'outputs nothing if there are no events and no identity' do
       @context.km_js.should be_empty
     end
     
+    context 'in production' do
+      before do
+        Rails.stub!(:env).and_return(mock('env', :production? => true))
+      end
+      
+      it 'outputs a JavaScript tag that loads the KISSmetrics API' do
+        @context.km_identify('Phil')
+        @context.km_js.should include('<script type="text/javascript" src="http://scripts.kissmetrics.com/t.js"></script>')
+      end
+    end
+    
+    context 'in non-production environments' do
+      it 'outputs a JavaScript tag that mocks the KISSmetrics API' do
+        @context.km_identify('Phil')
+        @context.km_js.should include('var KM =')
+      end
+    end
+    
+    
+    it 'outputs code that sets the KISSmetrics API key' do
+      @context.km_identify('Phil')
+      @context.km_js.should include('var KM_KEY = "abc123";')
+    end
+        
     it 'outputs a KM.record for every #km_record call' do
       @context.km_record('1')
       @context.km_record('2')
       @context.km_record('3')
-      @context.km_js.scan(/KM\.record/).size.should == 3
+      @context.km_js.scan(/KM\.record\("\d"\)/).size.should == 3
     end
     
     it 'resets the session when passed :reset => true' do

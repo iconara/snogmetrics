@@ -53,15 +53,55 @@ module Snogmetrics
     if buffer.empty?
       ''
     else
-      %(<script type="text/javascript">\n#{buffer.join("\n")}\n</script>\n)
+      <<-JAVASCRIPT
+      #{km_api_js}
+      <script type="text/javascript">
+      var KM_KEY = "#{kissmetrics_api_key}";
+      #{buffer.join("\n")}
+      </script>
+      JAVASCRIPT
     end
   end
 
   def km_js!
     km_js(:reset => true)
   end
+
+  # Override this method to set the KISSmetrics API key
+  def kissmetrics_api_key
+    ''
+  end
   
 private
+  
+  def km_api_js
+    if Rails.env.production?
+      %(<script type="text/javascript" src="http://scripts.kissmetrics.com/t.js"></script>)
+    else
+      <<-JS
+      <script type="text/javascript">
+      var KM = (function() {
+        var self = { };
+
+        if (window.console) {
+          self.record = function() {
+            console.log("KM.record(...)")
+            console.dir(arguments);
+          }
+          self.identify = function(who) {
+            console.log("KM.identify(\\"" + who + "\\")")
+          }
+        } else {
+          self.record = function() {}
+          self.identify = function() {}
+        }
+
+        return self;
+      })();
+      </script>
+      JS
+    end
+  end
   
   def km_events
     session[:km_events] || []
