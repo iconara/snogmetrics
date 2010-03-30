@@ -18,68 +18,63 @@ describe Snogmetrics do
     @session = {}
     @context = Object.new
     @context.extend(Snogmetrics)
-    @context.extend(ERB::Util)
     @context.stub!(:session).and_return(@session)
     @context.stub!(:kissmetrics_api_key).and_return('abc123')
   end
   
-  describe '#km_record' do
-    it 'will output a call to KM.record with with name and properties' do
-      @context.km_record('hello world', :foo => 'bar')
-      @context.km_js.should include('KM.record("hello world", {"foo":"bar"});')
+  describe '#record' do
+    it 'will output code that pushes an event with the specified name and properties' do
+      @context.km.record('hello world', :foo => 'bar')
+      @context.km.js.should include('_kmq.push(["record","hello world",{"foo":"bar"}]);')
     end
     
-    it 'will output a call to KM.record with name only' do
-      @context.km_record('foo')
-      @context.km_js.should include('KM.record("foo");')
+    it 'will output code that pushes an event with name only' do
+      @context.km.record('foo')
+      @context.km.js.should include('_kmq.push(["record","foo"]);')
     end
     
-    it 'will output a call to KM.record with properties only' do
-      @context.km_record({:foo => 'bar', :plink => :plonk})
-      # the order of the properties has is non-deterministic so we can't
-      # test for the whole call, just fragments
-      @context.km_js.should include('KM.record')
-      @context.km_js.should include('"foo":"bar"')
-      @context.km_js.should include('"plink":"plonk"')
+    it 'will output code that pushes an event with properties only' do
+      @context.km.record({:foo => 'bar', :plink => :plonk})
+      @context.km.js.should match(%r#_kmq.push\(\["record",\{(?:"foo":"bar","plink":"plonk"|"plink":"plonk","foo":"bar")\}\]\)#)
     end
     
     it 'complains if called without arguments' do
-      running { @context.km_record }.should raise_error
+      running { @context.km.record }.should raise_error
     end
     
     it 'complains if called with more than two arguments' do
-      running { @context.km_record(1, 2, 3) }.should raise_error
+      running { @context.km.record(1, 2, 3) }.should raise_error
     end
     
-    it 'will output events with the same name in the order they were recorded' do
-      @context.km_record('An important event', :p => 3)
-      @context.km_record('An important event', :p => 4)
-      js = @context.km_js
-      js.should include('KM.record("An important event", {"p":"3"});')
-      js.should include('KM.record("An important event", {"p":"4"});')
-      js.index('KM.record("An important event", {"p":"3"});').should < js.index('KM.record("An important event", {"p":"4"});')
+    it 'will output code that pushes events with the same name in the order they were recorded' do
+      @context.km.record('An important event', :p => 3)
+      @context.km.record('An important event', :p => 4)
+      js = @context.km.js
+      js.should include('_kmq.push(["record","An important event",{"p":"3"}]);')
+      js.should include('_kmq.push(["record","An important event",{"p":"4"}]);')
+      js.index('_kmq.push(["record","An important event",{"p":"3"}]);').should < js.index('_kmq.push(["record","An important event",{"p":"4"}]);')
     end
   end
   
-  describe '#km_identify' do
-    it 'will output a call to KM.identify with the provided identity' do
-      @context.km_identify('Phil')
-      @context.km_js.should include('KM.identify("Phil");')
+  describe '#identify' do
+    it 'will output code that pushes an identify call with the provided identity' do
+      @context.km.identify('Phil')
+      @context.km.js.should include('_kmq.push(["identify","Phil"]);')
     end
     
     it 'will only output the last identity set' do
-      @context.km_identify('Phil')
-      @context.km_identify('Anne')
-      @context.km_identify('Steve')
-      @context.km_js.should_not include('Phil')
-      @context.km_js.should_not include('Anne')
-      @context.km_js.should     include('Steve')
+      @context.km.identify('Phil')
+      @context.km.identify('Anne')
+      @context.km.identify('Steve')
+      @context.km.js.should_not include('Phil')
+      @context.km.js.should_not include('Anne')
+      @context.km.js.should     include('Steve')
     end
   end
   
-  describe '#km_js' do
+  describe '#js' do
     it 'outputs nothing if there are no events and no identity' do
-      @context.km_js.should be_empty
+      @context.km.js.should be_empty
     end
     
     context 'in production' do
@@ -88,57 +83,49 @@ describe Snogmetrics do
       end
       
       it 'outputs a JavaScript tag that loads the KISSmetrics API' do
-        @context.km_identify('Phil')
-        @context.km_js.should include('<script type="text/javascript" src="http://scripts.kissmetrics.com/t.js"></script>')
+        @context.km.identify('Phil')
+        @context.km.js.should include('scripts.kissmetrics.com/abc123.1.js')
       end
     end
     
-    context 'in non-production environments' do
-      it 'outputs a JavaScript tag that mocks the KISSmetrics API' do
-        @context.km_identify('Phil')
-        @context.km_js.should include('var KM =')
-      end
-    end
-    
-    
-    it 'outputs code that sets the KISSmetrics API key' do
-      @context.km_identify('Phil')
-      @context.km_js.should include('var KM_KEY = "abc123";')
+    it 'outputs code that conditionally sets the _kmq variable' do
+      @context.km.identify('Phil')
+      @context.km.js.should include('var _kmq = _kmq || [];')
     end
         
-    it 'outputs a KM.record for every #km_record call' do
-      @context.km_record('1')
-      @context.km_record('2')
-      @context.km_record('3')
-      @context.km_js.scan(/KM\.record\("\d"\)/).size.should == 3
+    it 'outputs code that pushes an event for every #record call' do
+      @context.km.record('1')
+      @context.km.record('2')
+      @context.km.record('3')
+      @context.km.js.scan(/_kmq.push\(\["record","\d"\]\)/).size.should == 3
     end
     
     it 'resets the session when passed :reset => true' do
-      @context.km_record('hello world')
-      @context.km_js(:reset => true)
-      @context.km_js.should be_empty
+      @context.km.record('hello world')
+      @context.km.js(:reset => true)
+      @context.km.js.should be_empty
     end
   end
   
-  describe '#km_js!' do
-    it 'works like km_js(:reset => true)' do
-      @context.km_record('hello world')
-      @context.km_js!
-      @context.km_js.should be_empty
+  describe '#js!' do
+    it 'works like #js(:reset => true)' do
+      @context.km.record('hello world')
+      @context.km.js!
+      @context.km.js.should be_empty
     end
     
-    it 'does not output any call to KM.identify if the identity has already been sent once' do
-      @context.km_identify('Steve')
-      @context.km_js!
-      @context.km_identify('Steve')
-      @context.km_js!.should_not include('KM.identify')
+    it 'does not push an identify call if the identity has already been sent once' do
+      @context.km.identify('Steve')
+      @context.km.js!
+      @context.km.identify('Steve')
+      @context.km.js!.should_not include('_kmq.push(["identify"')
     end
     
-    it 'ouputs a new call to KM.identify if #km_identify is called with a new identity' do
-      @context.km_identify('Steve')
-      @context.km_js!
-      @context.km_identify('Anne')
-      @context.km_js!.should include('KM.identify("Anne")')
+    it 'ouputs code that pushes an identify call if #identify is called with a new identity' do
+      @context.km.identify('Steve')
+      @context.km.js!
+      @context.km.identify('Anne')
+      @context.km.js!.should include('_kmq.push(["identify","Anne"])')
     end
   end
   
