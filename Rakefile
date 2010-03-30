@@ -6,8 +6,8 @@ begin
   require File.expand_path('../lib/snogmetrics', __FILE__)
   Jeweler::Tasks.new do |gem|
     gem.name = 'snogmetrics'
-    gem.summary = %Q{TODO: SNOGmetrics is a KISSmetrics helper for Rails}
-    gem.description = %Q{TODO: SNOGmetrics gives you the best of both worlds: access to KISSmetrics' JavaScript API through Ruby}
+    gem.summary = %Q{SNOGmetrics is a KISSmetrics helper for Rails}
+    gem.description = %Q{SNOGmetrics gives you the best of both worlds: access to KISSmetrics' JavaScript API through Ruby}
     gem.email = 'theo@iconara.net'
     gem.homepage = 'http://github.com/iconara/snogmetrics'
     gem.authors = ['Theo']
