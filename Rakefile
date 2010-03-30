@@ -3,6 +3,7 @@ require 'spec/rake/spectask'
 
 begin
   require 'jeweler'
+  require File.expand_path('../lib/snogmetrics', __FILE__)
   Jeweler::Tasks.new do |gem|
     gem.name = 'snogmetrics'
     gem.summary = %Q{TODO: SNOGmetrics is a KISSmetrics helper for Rails}
@@ -10,6 +11,7 @@ begin
     gem.email = 'theo@iconara.net'
     gem.homepage = 'http://github.com/iconara/snogmetrics'
     gem.authors = ['Theo']
+    gem.version = Snogmetrics::VERSION
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
