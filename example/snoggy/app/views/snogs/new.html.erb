@@ -1,0 +1,11 @@
+<% form_for :snog, :url => {:action => :create} do |f| -%>
+  <p>
+    <%= f.label :who, 'Who are you?' %><br/>
+    <%= f.text_field :who %>
+  </p>
+  <p>
+    <%= f.label :whom, 'Whom would you like to snog?' %><br/>
+    <%= f.text_field :whom %>
+  </p>
+  <p><%= f.submit 'Fullfill my wish!' %></p>
+<% end -%>
