@@ -50,9 +50,9 @@ describe Snogmetrics do
       @context.km.record('An important event', :p => 3)
       @context.km.record('An important event', :p => 4)
       js = @context.km.js
-      js.should include('_kmq.push(["record","An important event",{"p":"3"}]);')
-      js.should include('_kmq.push(["record","An important event",{"p":"4"}]);')
-      js.index('_kmq.push(["record","An important event",{"p":"3"}]);').should < js.index('_kmq.push(["record","An important event",{"p":"4"}]);')
+      js.should include('_kmq.push(["record","An important event",{"p":3}]);')
+      js.should include('_kmq.push(["record","An important event",{"p":4}]);')
+      js.index('_kmq.push(["record","An important event",{"p":3}]);').should < js.index('_kmq.push(["record","An important event",{"p":4}]);')
     end
   end
   
@@ -104,6 +104,11 @@ describe Snogmetrics do
       @context.km.record('hello world')
       @context.km.js(:reset => true)
       @context.km.js.should be_empty
+    end
+    
+    it 'does not let HTML slip through' do
+      @context.km.identify('</html>')
+      @context.km.js.should_not include('</html>')
     end
   end
   
