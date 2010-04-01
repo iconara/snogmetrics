@@ -50,9 +50,11 @@ describe Snogmetrics do
       @context.km.record('An important event', :p => 3)
       @context.km.record('An important event', :p => 4)
       js = @context.km.js
-      js.should include('_kmq.push(["record","An important event",{"p":3}]);')
-      js.should include('_kmq.push(["record","An important event",{"p":4}]);')
-      js.index('_kmq.push(["record","An important event",{"p":3}]);').should < js.index('_kmq.push(["record","An important event",{"p":4}]);')
+      first = '_kmq.push(["record","An important event",{"p":3}]);'
+      second = '_kmq.push(["record","An important event",{"p":4}]);'
+      js.should include(first)
+      js.should include(second)
+      js.index(first).should < js.index(second)
     end
   end
   
@@ -97,7 +99,7 @@ describe Snogmetrics do
       @context.km.record('1')
       @context.km.record('2')
       @context.km.record('3')
-      @context.km.js.scan(/_kmq.push\(\["record","\d"\]\)/).size.should == 3
+      @context.km.js.scan(/_kmq.push\(\["record","\d"\]\)/).should have(3).items
     end
     
     it 'resets the session when passed :reset => true' do
