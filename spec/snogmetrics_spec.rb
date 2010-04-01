@@ -84,9 +84,19 @@ describe Snogmetrics do
         Rails.stub!(:env).and_return(mock('env', :production? => true))
       end
       
-      it 'outputs a JavaScript tag that loads the KISSmetrics API' do
+      it 'outputs a JavaScript tag that loads the KISSmetrics API for the provided API key' do
+        @context.stub!(:kissmetrics_api_key).and_return('cab1ebeef')
         @context.km.identify('Phil')
-        @context.km.js.should include('scripts.kissmetrics.com/abc123.1.js')
+        @context.km.js.should include('scripts.kissmetrics.com/cab1ebeef.1.js')
+      end
+    end
+    
+    context 'overriding #fake_km_api?' do
+      it 'will do your bidding, and not be influenced by Rails.env' do
+        Rails.stub!(:env).and_return(mock('env', :production? => true))
+        @context.stub!(:fake_km_api?).and_return(true)
+        @context.km.identify('Joyce')
+        @context.km.js.should_not include('scripts.kissmetrics.com')
       end
     end
     
