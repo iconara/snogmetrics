@@ -1,0 +1,13 @@
+# SNOGmetrics changelog
+
+## 0.1.2
+
+API documentation and a way to override the logic that determines when the stub API is used instead of the real KISSmetrics API.
+
+## 0.1.1
+
+Refactored and removed 40% of the code.
+
+## 0.1.0
+
+First release.
