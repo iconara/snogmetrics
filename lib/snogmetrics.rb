@@ -1,3 +1,18 @@
+# If SNOGmetrics is used as a Rails plugin, this module is automatically mixed 
+# into ActionController::Base, so that it's #km method is available in 
+# controllers and in views.
+#
+# If not used as a Rails plugin, make sure that the context where Snogmetrics
+# is mixed in defines #session (which should return hash).
+#
+# You should override #kissmetrics_api_key in an initializer to set the
+# KISSmetrics API key.
+#
+# You can also override #use_fake_kissmetrics_api? to provide your own logic for
+# when the real KISSmetrics API and when the fake should be used. The fake API
+# simply outputs all events to the console (if the console is defined). The
+# the default implementation outputs the real API only when 
+# `Rails.env.production?` is true.
 module Snogmetrics
   VERSION = '0.1.1'
 

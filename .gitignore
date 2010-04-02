@@ -15,10 +15,10 @@ tmtags
 
 ## PROJECT::GENERAL
 /coverage
-/rdoc
-/yardoc
+/doc
 /coverage
 /pkg
 /.bundle
+/.yardoc
 
 ## PROJECT::SPECIFIC
