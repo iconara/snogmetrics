@@ -91,10 +91,10 @@ describe Snogmetrics do
       end
     end
     
-    context 'overriding #fake_km_api?' do
+    context 'overriding #use_fake_kissmetrics_api?' do
       it 'will do your bidding, and not be influenced by Rails.env' do
         Rails.stub!(:env).and_return(mock('env', :production? => true))
-        @context.stub!(:fake_km_api?).and_return(true)
+        @context.stub!(:use_fake_kissmetrics_api?).and_return(true)
         @context.km.identify('Joyce')
         @context.km.js.should_not include('scripts.kissmetrics.com')
       end

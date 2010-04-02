@@ -20,7 +20,7 @@ module Snogmetrics
   # KISSmetrics API. It has the methods #record and #identify, which work just
   # like the corresponding methods in the JavaScript API.
   def km
-    @km_api ||= KissmetricsApi.new(kissmetrics_api_key, session, fake_km_api?)
+    @km_api ||= KissmetricsApi.new(kissmetrics_api_key, session, use_fake_kissmetrics_api?)
   end
 
   # Override this method to set the KISSmetrics API key
@@ -30,7 +30,7 @@ module Snogmetrics
   
   # Override this method to customize when the real API and when the stub API
   # will be outputted.
-  def fake_km_api?
+  def use_fake_kissmetrics_api?
     if defined? Rails
       ! Rails.env.production?
     else
