@@ -29,6 +29,10 @@ Yes it does.
 
 Just do it. You need to make sure that the `_kmq` array exists, though. SNOGmetrics will define it where you place `<%= km.js! %>`, but that is usually at the bottom of the page (with the async API you could probably put it at the top if you wanted to), so if you want to add things to `_kmq` before that you need to define it yourself. Just add `var _kmq = _kmq || []` and you're set.
 
+## What about A/B testing
+
+SNOGmetrics implements #set, which is equivalent to `_kmq.push(["set", ...])`, the preferred way of recording which version a user saw in an A/B test. SNOGmetrics does not support the `KM.ab` function, because that's something you want to do in JavaScript only.
+
 ## Anything else I should know?
 
 Yes, SNOGmetrics will _not_ output the KISSmetrics API code unless `RAILS_ENV` is `production`. Instead it will output code that logs all calls to the console (if `console` is defined).
