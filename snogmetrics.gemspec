@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{snogmetrics}
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Theo"]
-  s.date = %q{2010-04-02}
+  s.date = %q{2010-04-16}
   s.description = %q{SNOGmetrics gives you the best of both worlds: access to KISSmetrics' JavaScript API through Ruby}
   s.email = %q{theo@iconara.net}
   s.extra_rdoc_files = [
