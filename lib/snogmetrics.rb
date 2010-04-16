@@ -68,6 +68,11 @@ private
       end
     end
     
+    # Register which variant the user saw in an A/B test.
+    def set(experiment, variant)
+      queue << ['set', experiment, variant]
+    end
+    
     # Equivalent to `js(:reset => true)`, i.e. returns the JavaScript code
     # needed to load the KISSmetrics API and send the current state, and reset
     # the state afterwards.
