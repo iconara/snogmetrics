@@ -68,6 +68,17 @@ private
       end
     end
     
+    # The equivalent of the `KM.trackClick` method of the JavaScript API. The first
+    # argument should be a selector (a tag id or class name). Furthermore you can
+    # pass either an event name, an event name and a hash of properties, or only
+    # a hash of properties.
+    def trackClick(selector, *args)
+      raise 'Not enough arguments' if args.size == 0
+      raise 'Too many arguments' if args.size > 2
+
+      queue << ['trackClick', selector, *args]
+    end
+
     # Register which variant the user saw in an A/B test.
     def set(experiment, variant)
       queue << ['set', experiment, variant]

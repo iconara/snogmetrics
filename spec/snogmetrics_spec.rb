@@ -58,6 +58,35 @@ describe Snogmetrics do
     end
   end
   
+  describe '#trackClick' do
+    it 'will output code that pushes an event with the specified name and properties' do
+      @context.km.trackClick('tagid', 'hello world', :foo => 'bar')
+      @context.km.js.should include('_kmq.push(["trackClick","tagid","hello world",{"foo":"bar"}]);')
+    end
+
+    it 'will output code that pushes an event with name only' do
+      @context.km.trackClick('tagid', 'foo')
+      @context.km.js.should include('_kmq.push(["trackClick","tagid","foo"]);')
+    end
+
+    it 'will output code that pushes an event with properties only' do
+      @context.km.trackClick('tagid', {:foo => 'bar', :plink => :plonk})
+      @context.km.js.should match(%r#_kmq.push\(\["trackClick","tagid",\{(?:"foo":"bar","plink":"plonk"|"plink":"plonk","foo":"bar")\}\]\)#)
+    end
+
+    it 'complains if called without arguments' do
+      running { @context.km.trackClick }.should raise_error
+    end
+
+    it 'complains if called with selector only' do
+      running { @context.km.trackClick('tagid') }.should raise_error
+    end
+
+    it 'complains if called with more than three arguments' do
+      running { @context.km.trackClick('tagid', 'hello world', {:foo => 'bar'}, '12') }.should raise_error
+    end
+  end
+
   describe '#identify' do
     it 'will output code that pushes an identify call with the provided identity' do
       @context.km.identify('Phil')
