@@ -1,3 +1,5 @@
+require 'snogmetrics/railtie' if defined? Rails::Railtie
+
 # If SNOGmetrics is used as a Rails plugin, this module is automatically mixed 
 # into ActionController::Base, so that it's #km method is available in 
 # controllers and in views.
