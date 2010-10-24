@@ -14,7 +14,7 @@
 # the default implementation outputs the real API only when 
 # `Rails.env.production?` is true.
 module Snogmetrics
-  VERSION = '0.1.4'
+  VERSION = '0.1.5'
 
   # Returns an instance of KissmetricsApi, which is an interface to the
   # KISSmetrics API. It has the methods #record and #identify, which work just
