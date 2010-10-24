@@ -130,18 +130,9 @@ private
     def api_js
       if @fake_it
         <<-JS
-        var KM = {
-          record: function() {
-            _kmq.push(["record"].concat(Array.prototype.slice.apply(arguments)));
-          },
-          identify: function() {
-            _kmq.push(["identify"].concat(Array.prototype.slice.apply(arguments)));
-          }
-        };
-
         if (window.console) {
           _kmq = (function(queue) {
-            function printCall() {
+            var printCall = function() {
               console.dir(arguments);
             }
 

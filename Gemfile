@@ -1,14 +1,4 @@
-source :gemcutter
+source :rubygems
 
-group :development do
-  gem 'rake'
-  gem 'jeweler'
-  gem 'yard'
-  gem 'BlueCloth'
-  gem 'rails', '= 2.3.5'
-end
-
-group :test do
-  gem 'rspec', '>= 1.3.0'
-  gem 'rcov'
-end
+# Specify your gem's dependencies in swifff.gemspec
+gemspec
