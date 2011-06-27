@@ -111,10 +111,6 @@ describe Snogmetrics do
   end
   
   describe '#js' do
-    it 'outputs nothing if there are no events and no identity' do
-      @context.km.js.should be_empty
-    end
-    
     context 'in production' do
       before do
         Rails.stub!(:env).and_return(mock('env', :production? => true))
@@ -135,6 +131,10 @@ describe Snogmetrics do
         @context.km.js.should_not include('scripts.kissmetrics.com')
       end
     end
+
+    it 'outputs javascript even if there are no events and no identity' do
+      @context.km.js.should include('kmq')
+    end
     
     it 'outputs code that conditionally sets the _kmq variable' do
       @context.km.identify('Phil')
@@ -151,7 +151,7 @@ describe Snogmetrics do
     it 'resets the session when passed :reset => true' do
       @context.km.record('hello world')
       @context.km.js(:reset => true)
-      @context.km.js.should be_empty
+      @context.km.js.should_not include('hello world')
     end
     
     it 'does not let HTML slip through' do
@@ -164,7 +164,7 @@ describe Snogmetrics do
     it 'works like #js(:reset => true)' do
       @context.km.record('hello world')
       @context.km.js!
-      @context.km.js.should be_empty
+      @context.km.js!.should_not include('_kmq.push(["record"')
     end
     
     it 'does not push an identify call if the identity has already been sent once' do

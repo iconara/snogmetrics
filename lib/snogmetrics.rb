@@ -105,22 +105,18 @@ private
     # subsequent calls to #js will not send events that have already been sent.
     def js(options={})
       options = {:reset => false}.merge(options)
-      
-      if queue.empty?
-        ''
-      else
-        buffer = queue.map { |item| %(_kmq.push(#{item.to_json});) }
-        
-        queue.clear if options[:reset]
-        
-        <<-JAVASCRIPT
-        <script type="text/javascript">
-        var _kmq = _kmq || [];
-        #{api_js}
-        #{buffer.join("\n")}
-        </script>
-        JAVASCRIPT
-      end
+
+      buffer = queue.map { |item| %(_kmq.push(#{item.to_json});) }
+
+      queue.clear if options[:reset]
+
+      <<-JAVASCRIPT
+      <script type="text/javascript">
+      var _kmq = _kmq || [];
+      #{api_js}
+      #{buffer.join("\n")}
+      </script>
+      JAVASCRIPT
     end
   
   private
