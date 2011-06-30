@@ -132,6 +132,45 @@ describe Snogmetrics do
       end
     end
 
+    context 'overriding #output_strategy with :console_log' do
+      it 'outputs calls to console.log' do
+        Rails.stub!(:env).and_return(mock('env', :production? => true))
+        @context.stub!(:output_strategy).and_return(:console_log)
+        @context.km.identify('Joyce')
+        @context.km.js.should_not include('scripts.kissmetrics.com')
+        @context.km.js.should include('console.dir')
+      end
+    end
+
+    context 'overriding #output_strategy with :array' do
+      it 'just stores calls in the _kmq array' do
+        Rails.stub!(:env).and_return(mock('env', :production? => true))
+        @context.stub!(:output_strategy).and_return(:array)
+        @context.km.identify('Joyce')
+        @context.km.js.should_not include('scripts.kissmetrics.com')
+        @context.km.js.should_not include('console.dir')
+      end
+    end
+
+    context 'overriding #output_strategy with :live' do
+      it 'sends calls to KISSmetrics' do
+        Rails.stub!(:env).and_return(mock('env', :production? => true))
+        @context.stub!(:output_strategy).and_return(:live)
+        @context.km.identify('Joyce')
+        @context.km.js.should include('scripts.kissmetrics.com')
+        @context.km.js.should_not include('console.dir')
+      end
+    end
+
+    context 'overriding #output_strategy with something else' do
+      it 'raises' do
+        @context.stub!(:output_strategy).and_return(:something_else)
+        lambda {
+          @context.km.js.should include('scripts.kissmetrics.com')
+        }.should raise_error(RuntimeError, "Unknown KISSmetrics output strategy: something_else")
+      end
+    end
+
     it 'outputs javascript even if there are no events and no identity' do
       @context.km.js.should include('kmq')
     end
