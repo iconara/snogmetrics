@@ -19,7 +19,7 @@ require 'snogmetrics/railtie' if defined? Rails::Railtie
 # The default implementation outputs the real API only when 
 # `Rails.env.production?` is true, and otherwise uses console.log
 module Snogmetrics
-  VERSION = '0.1.7'
+  VERSION = '0.1.8'
 
   # Returns an instance of KissmetricsApi, which is an interface to the
   # KISSmetrics API. It has the methods #record and #identify, which work just
