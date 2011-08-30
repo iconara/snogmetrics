@@ -106,7 +106,7 @@ describe Snogmetrics do
   describe '#set' do
     it 'will output code that pushes a set call with the provided experiment name and variant' do
       @context.km.set('My Awesome Experiment', 'variant_a')
-      @context.km.js.should include('_kmq.push(["set","My Awesome Experiment","variant_a"])')
+      @context.km.js.should include('_kmq.push(["set",{"My Awesome Experiment":"variant_a"}])')
     end
   end
   

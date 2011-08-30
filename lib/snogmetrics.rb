@@ -103,7 +103,7 @@ private
 
     # Register which variant the user saw in an A/B test.
     def set(experiment, variant)
-      queue << ['set', experiment, variant]
+      queue << ['set', { experiment => variant }]
     end
     
     # Equivalent to `js(:reset => true)`, i.e. returns the JavaScript code
