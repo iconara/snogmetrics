@@ -17,7 +17,8 @@ SNOGmetrics works similarly to flash messages. Events are recorded and saved to 
 1. `gem install snogmetrics`
 2. Edit `config/environment.rb` and add `config.gem 'snogmetrics'`
 3. Edit your layout(s) and add `<%= km.js! %>` where you keep your JavaScript includes.
-4. Replace all your `KM.record(...)` and `KM.identify(...)` calls in JavaScript with calls to `km.record(...)` and `km.identify(...)`
+4. Override `kissmetrics_api_key` in an initializer so that it returns your KISSmetrics api key.
+5. Replace all your `KM.record(...)` and `KM.identify(...)` calls in JavaScript with calls to `km.record(...)` and `km.identify(...)`
 
 Have a look at the included example application to see it in action.
 
