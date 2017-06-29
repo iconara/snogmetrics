@@ -2,14 +2,10 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'snogmetrics'
-require 'active_support'
-require 'action_view/erb/util'
-require 'spec'
-require 'spec/autorun'
+require 'active_support/all'
+require 'action_view'
 
+alias running lambda
 
-alias :running :lambda
-
-Spec::Runner.configure do |config|
-  
+RSpec.configure do |config|
 end
