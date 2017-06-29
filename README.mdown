@@ -12,25 +12,18 @@ It's true, but why settle for either or?
 
 SNOGmetrics works similarly to flash messages. Events are recorded and saved to the session, and are then sent when the next page is rendered. This way you get all of the benefits of the JavaScript API, but you can record events in your controllers. All you have to do is install this gem, configure it, and add a snipplet of code to your layout.
 
-## Rails 3 How do I use it?
+## Rails 3+ How do I use it?
 
 1. Add `snogmetrics` in your gemfile and run the bundle command to install it
 2. Add an initializer file like the following under your config/initializers folder
 
-        rails_env = ENV['RAILS_ENV'] || 'development'
-        KISSMETRICS_CONFIG ||= YAML.load_file("#{Rails.root}/config/kissmetrics.yml")[rails_env]
-        
         require 'snogmetrics'
-        
-        Snogmetrics.send(:define_method, :kissmetrics_api_key) { KISSMETRICS_CONFIG['api_key'] }
-        
-        ActionController::Base.send(:include, Snogmetrics)
-        ActionView::Base.send(:include, Snogmetrics)
+        Snogmetrics.kissmetrics_api_key = "your-api-key-here"
 
 3. Edit your layout(s) and add `<%= km.js.html_safe %>` where you keep your JavaScript includes.
 5. Replace all your `KM.record(...)` and `KM.identify(...)` calls in JavaScript with calls to `km.record(...)` and `km.identify(...)`
 
-## Rails > 2.3.5 How do I use it?
+## Rails >= 2.3.5 How do I use it?
 
 1. `gem install snogmetrics`
 2. Edit `config/environment.rb` and add `config.gem 'snogmetrics'`
