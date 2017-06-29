@@ -2,8 +2,7 @@ require 'bundler'
 require 'yard'
 require 'spec/rake/spectask'
 
-
-task :default => :spec
+task default: :spec
 
 Bundler::GemHelper.install_tasks
 
