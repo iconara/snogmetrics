@@ -30,7 +30,7 @@ module Snogmetrics
   # KISSmetrics API. It has the methods #record and #identify, which work just
   # like the corresponding methods in the JavaScript API.
   def km
-    @km_api ||= KissmetricsApi.new(kissmetrics_api_key, session, output_strategy)
+    @km_api ||= KissmetricsApi.new(Snogmetrics.kissmetrics_api_key, session, output_strategy)
   end
 
   # Override this method to set the output strategy.
