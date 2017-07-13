@@ -40,11 +40,12 @@ module Snogmetrics
   # :array       store events pushed to KISSmetrics on _kmq
   # :live        send events to KISSmetrics via the async JS API
   def output_strategy
-    if use_fake_kissmetrics_api?
-      :console_log
-    else
-      :live
-    end
+    Snogmetrics.output_strategy ||
+      if use_fake_kissmetrics_api?
+        :console_log
+      else
+        :live
+      end
   end
 
   # Deprecated: Prefer overriding #output_strategy to control the output strategy.
