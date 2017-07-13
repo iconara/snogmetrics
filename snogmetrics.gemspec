@@ -14,9 +14,9 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://github.org/iconara/snogmetrics'
   s.summary     = 'SNOGmetrics is a KISSmetrics helper for Rails'
   s.description = 'SNOGmetrics gives you the best of both worlds: access to KISSmetrics\' JavaScript API through Ruby'
+  s.license     = 'MIT'
 
   s.required_rubygems_version = '>= 1.3.6'
-  s.rubyforge_project         = 'snogmetrics'
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
