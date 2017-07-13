@@ -20,7 +20,7 @@ require 'snogmetrics/kissmetrics_api'
 # The default implementation outputs the real API only when
 # `Rails.env.production?` is true, and otherwise uses console.log
 module Snogmetrics
-  VERSION = '0.1.9'.freeze
+  VERSION = '0.2.1'.freeze
 
   class << self
     attr_accessor :kissmetrics_api_key, :output_strategy
