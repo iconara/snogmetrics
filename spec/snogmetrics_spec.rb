@@ -16,7 +16,6 @@ describe Snogmetrics do
     @context = Object.new
     @context.extend(Snogmetrics)
     allow(@context).to receive(:session).and_return(@session)
-    allow(@context).to receive(:kissmetrics_api_key).and_return('abc123')
   end
 
   describe '#record' do
@@ -114,7 +113,7 @@ describe Snogmetrics do
       end
 
       it 'outputs a JavaScript tag that loads the KISSmetrics API for the provided API key' do
-        allow(@context).to receive(:kissmetrics_api_key).and_return('cab1ebeef')
+        Snogmetrics.kissmetrics_api_key = 'cab1ebeef'
         @context.km.identify('Phil')
         expect(@context.km.js).to include('scripts.kissmetrics.com/cab1ebeef.2.js')
       end
@@ -137,6 +136,14 @@ describe Snogmetrics do
         expect(@context.km.js).not_to include('scripts.kissmetrics.com')
         expect(@context.km.js).to include('console.dir')
       end
+
+      it 'outputs calls to console.log when configured with accessor' do
+        allow(Rails).to receive(:env).and_return(double('env', production?: true))
+        Snogmetrics.output_strategy = :console_log
+        @context.km.identify('Joyce')
+        expect(@context.km.js).not_to include('scripts.kissmetrics.com')
+        expect(@context.km.js).to include('console.dir')
+      end
     end
 
     context 'overriding #output_strategy with :array' do
@@ -147,12 +154,28 @@ describe Snogmetrics do
         expect(@context.km.js).not_to include('scripts.kissmetrics.com')
         expect(@context.km.js).not_to include('console.dir')
       end
+
+      it 'just stores calls in the _kmq array when configured with accessor' do
+        allow(Rails).to receive(:env).and_return(double('env', production?: true))
+        Snogmetrics.output_strategy = :array
+        @context.km.identify('Joyce')
+        expect(@context.km.js).not_to include('scripts.kissmetrics.com')
+        expect(@context.km.js).not_to include('console.dir')
+      end
     end
 
     context 'overriding #output_strategy with :live' do
       it 'sends calls to KISSmetrics' do
         allow(Rails).to receive(:env).and_return(double('env', production?: true))
         allow(@context).to receive(:output_strategy).and_return(:live)
+        @context.km.identify('Joyce')
+        expect(@context.km.js).to include('scripts.kissmetrics.com')
+        expect(@context.km.js).not_to include('console.dir')
+      end
+
+      it 'sends calls to KISSmetrics when configured with accessor' do
+        allow(Rails).to receive(:env).and_return(double('env', production?: true))
+        Snogmetrics.output_strategy = :live
         @context.km.identify('Joyce')
         expect(@context.km.js).to include('scripts.kissmetrics.com')
         expect(@context.km.js).not_to include('console.dir')
