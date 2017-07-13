@@ -1,20 +1,14 @@
 require 'bundler'
 require 'yard'
 require 'spec/rake/spectask'
-
-task default: :spec
+require 'rubocop/rake_task'
+require 'rspec/core/rake_task'
+task default: [:spec, :rubocop]
 
 Bundler::GemHelper.install_tasks
 
 YARD::Rake::YardocTask.new
 
-Spec::Rake::SpecTask.new(:spec) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
-end
+RSpec::Core::RakeTask.new(:spec)
 
-Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
-end
+RuboCop::RakeTask.new(:rubocop)
