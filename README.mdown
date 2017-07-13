@@ -19,16 +19,8 @@ SNOGmetrics works similarly to flash messages. Events are recorded and saved to 
 
         Snogmetrics.kissmetrics_api_key = "your-api-key-here"
 
-3. Edit your layout(s) and add `<%= km.js.html_safe %>` where you keep your JavaScript includes.
-5. Replace all your `KM.record(...)` and `KM.identify(...)` calls in JavaScript with calls to `km.record(...)` and `km.identify(...)`
-
-## Rails >= 2.3.5 How do I use it?
-
-1. `gem install snogmetrics`
-2. Edit `config/environment.rb` and add `config.gem 'snogmetrics'`
-3. Edit your layout(s) and add `<%= km.js! %>` where you keep your JavaScript includes.
-4. Override `kissmetrics_api_key` in an initializer so that it returns your KISSmetrics api key.
-5. Replace all your `KM.record(...)` and `KM.identify(...)` calls in JavaScript with calls to `km.record(...)` and `km.identify(...)`
+3. Edit your layout(s) and add `<%= km.js! %>` in the body tag (this makes it work nicely with Turbolinks)
+4. Replace all your `KM.record(...)` and `KM.identify(...)` calls in JavaScript with calls to `km.record(...)` and `km.identify(...)`
 
 Have a look at the included example application to see it in action.
 
