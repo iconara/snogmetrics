@@ -1,7 +1,6 @@
 require 'snogmetrics'
 require 'rails'
 
-
 module Snogmetrics
   class Railtie < Rails::Railtie
     config.after_initialize do
