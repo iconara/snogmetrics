@@ -17,7 +17,6 @@ SNOGmetrics works similarly to flash messages. Events are recorded and saved to 
 1. Add `snogmetrics` in your gemfile and run the bundle command to install it
 2. Add an initializer file like the following under your config/initializers folder
 
-        require 'snogmetrics'
         Snogmetrics.kissmetrics_api_key = "your-api-key-here"
 
 3. Edit your layout(s) and add `<%= km.js.html_safe %>` where you keep your JavaScript includes.
@@ -47,9 +46,11 @@ SNOGmetrics implements #set, which is equivalent to `_kmq.push(["set", ...])`, t
 
 ## Anything else I should know?
 
-Yes, SNOGmetrics will _not_ output the KISSmetrics API code unless `RAILS_ENV` is `production`. Instead it will output code that logs all calls to the console (if `console` is defined).
+Yes, SNOGmetrics will _not_ output the KISSmetrics API code unless `RAILS_ENV` is `production` by default. Instead it will output code that logs all calls to the console (if `console` is defined).
 
-In a future version this behaviour might be overrideable.
+If you'd like to change this behaviour, add the following to your initializer:
+
+        Snogmetrics.output_strategy = :live
 
 ## Note on Patches/Pull Requests
  
