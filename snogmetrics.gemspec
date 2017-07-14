@@ -18,15 +18,17 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = '>= 1.3.6'
 
-  s.add_development_dependency 'bundler'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'yard'
-  s.add_development_dependency 'BlueCloth'
-  s.add_development_dependency 'rails', '~> 4.2'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'rubocop'
+  s.files         = `git ls-files -z`.split("\x0").reject do |f|
+    f.match(%r{^(test|spec|features|example)/})
+  end
+  s.bindir        = 'bin'
+  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.require_paths = ['lib']
 
-  s.files        = `git ls-files`.split("\n")
-  s.executables  = `git ls-files`.split("\n").map { |f| f =~ /^bin\/(.*)/ ? Regexp.last_match(1) : nil }.compact
-  s.require_path = 'lib'
+  s.add_development_dependency 'bundler', '~> 1.14'
+  s.add_development_dependency 'rake', '~> 12.0'
+  s.add_development_dependency 'yard', '~> 0.9'
+  s.add_development_dependency 'rails', '~> 4.2'
+  s.add_development_dependency 'rspec', '~> 3.6'
+  s.add_development_dependency 'rubocop', '~> 0.49'
 end
